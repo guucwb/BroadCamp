@@ -1,0 +1,696 @@
+[
+  {
+    "timestamp": "2025-07-17T22:58:29.274Z",
+    "templateSid": "HX3da0d905dc3f9f9f5ac6239fabcfd715",
+    "channel": "sms",
+    "total": 2,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350"
+    ]
+  },
+  {
+    "timestamp": "2025-07-18T21:40:40.247Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "sms",
+    "total": 2,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350"
+    ]
+  },
+  {
+    "timestamp": "2025-07-24T15:11:39.270Z",
+    "templateSid": "HX3da0d905dc3f9f9f5ac6239fabcfd715",
+    "channel": "sms",
+    "total": 2,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350"
+    ]
+  },
+  {
+    "timestamp": "2025-07-24T15:14:21.928Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "sms",
+    "total": 2,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350"
+    ]
+  },
+  {
+    "timestamp": "2025-07-24T17:50:33.622Z",
+    "templateSid": "HX423943b1db4ff28dcbd419e2ad16d209",
+    "channel": "sms",
+    "total": 2,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350"
+    ]
+  },
+  {
+    "timestamp": "2025-07-24T21:41:16.455Z",
+    "templateSid": "HX423943b1db4ff28dcbd419e2ad16d209",
+    "channel": "sms",
+    "total": 2,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350"
+    ]
+  },
+  {
+    "timestamp": "2025-07-24T21:45:06.604Z",
+    "templateSid": "HX423943b1db4ff28dcbd419e2ad16d209",
+    "channel": "sms",
+    "total": 2,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350"
+    ]
+  },
+  {
+    "timestamp": "2025-07-24T21:49:11.640Z",
+    "templateSid": "HX423943b1db4ff28dcbd419e2ad16d209",
+    "channel": "sms",
+    "total": 2,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350"
+    ]
+  },
+  {
+    "timestamp": "2025-07-24T21:50:21.163Z",
+    "templateSid": "HX423943b1db4ff28dcbd419e2ad16d209",
+    "channel": "sms",
+    "total": 2,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350"
+    ]
+  },
+  {
+    "timestamp": "2025-07-24T22:01:32.634Z",
+    "templateSid": "HX423943b1db4ff28dcbd419e2ad16d209",
+    "channel": "sms",
+    "total": 2,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350"
+    ]
+  },
+  {
+    "timestamp": "2025-07-24T22:02:55.527Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "whatsapp",
+    "total": 2,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350"
+    ]
+  },
+  {
+    "timestamp": "2025-07-24T22:03:25.226Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "sms",
+    "total": 2,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350"
+    ]
+  },
+  {
+    "timestamp": "2025-07-30T20:08:39.901Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "whatsapp",
+    "total": 2,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350"
+    ]
+  },
+  {
+    "timestamp": "2025-07-30T20:48:22.565Z",
+    "templateSid": "HX3da0d905dc3f9f9f5ac6239fabcfd715",
+    "channel": "sms",
+    "total": 2,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350"
+    ]
+  },
+  {
+    "timestamp": "2025-07-30T20:48:30.308Z",
+    "templateSid": "HX3da0d905dc3f9f9f5ac6239fabcfd715",
+    "channel": "whatsapp",
+    "total": 2,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350"
+    ]
+  },
+  {
+    "timestamp": "2025-07-30T20:52:44.328Z",
+    "templateSid": "HXace5d20bc65a55b27ee15a5e67386587",
+    "channel": "whatsapp",
+    "total": 3,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+551173786386"
+    ]
+  },
+  {
+    "timestamp": "2025-07-30T20:53:58.659Z",
+    "templateSid": "HXace5d20bc65a55b27ee15a5e67386587",
+    "channel": "whatsapp",
+    "total": 3,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+551173786386"
+    ]
+  },
+  {
+    "timestamp": "2025-07-30T20:54:48.778Z",
+    "templateSid": "HXace5d20bc65a55b27ee15a5e67386587",
+    "channel": "whatsapp",
+    "total": 3,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386"
+    ]
+  },
+  {
+    "timestamp": "2025-07-30T20:55:10.753Z",
+    "templateSid": "HXace5d20bc65a55b27ee15a5e67386587",
+    "channel": "sms",
+    "total": 3,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386"
+    ]
+  },
+  {
+    "timestamp": "2025-07-31T15:12:13.154Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "whatsapp",
+    "total": 3,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386"
+    ]
+  },
+  {
+    "timestamp": "2025-08-08T13:07:09.155Z",
+    "templateSid": "HX36376ed923cfca9304dd32c82e85c50d",
+    "channel": "whatsapp",
+    "total": 3,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386"
+    ]
+  },
+  {
+    "timestamp": "2025-08-08T13:07:36.351Z",
+    "templateSid": "HX36376ed923cfca9304dd32c82e85c50d",
+    "channel": "sms",
+    "total": 3,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386"
+    ]
+  },
+  {
+    "timestamp": "2025-08-08T13:17:56.864Z",
+    "templateSid": "HXe18c5462480d93844e07d89c2872c0bb",
+    "channel": "sms",
+    "total": 6,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386",
+      "+5541998937246",
+      "+5511968526616",
+      "+5511969222122"
+    ]
+  },
+  {
+    "timestamp": "2025-08-08T13:18:22.798Z",
+    "templateSid": "HXe18c5462480d93844e07d89c2872c0bb",
+    "channel": "whatsapp",
+    "total": 6,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386",
+      "+5541998937246",
+      "+5511968526616",
+      "+5511969222122"
+    ]
+  },
+  {
+    "timestamp": "2025-08-12T18:35:03.469Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "sms",
+    "total": 6,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386",
+      "+5541998937246",
+      "+5511968526616",
+      "+5511969222122"
+    ]
+  },
+  {
+    "timestamp": "2025-08-15T17:00:55.805Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "sms",
+    "total": 6,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386",
+      "+5541998937246",
+      "+5511968526616",
+      "+5511969222122"
+    ]
+  },
+  {
+    "timestamp": "2025-08-15T18:09:01.456Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "sms",
+    "total": 6,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386",
+      "+5541998937246",
+      "+5511968526616",
+      "+5511969222122"
+    ]
+  },
+  {
+    "timestamp": "2025-08-19T13:35:49.004Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "sms",
+    "total": 6,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386",
+      "+5541998937246",
+      "+5511968526616",
+      "+5511969222122"
+    ]
+  },
+  {
+    "timestamp": "2025-08-19T13:43:06.186Z",
+    "templateSid": "HX3893ab59bbf8a023cd96e45d36e10a31",
+    "channel": "sms",
+    "total": 6,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386",
+      "+5541998937246",
+      "+5511968526616",
+      "+5511969222122"
+    ]
+  },
+  {
+    "timestamp": "2025-08-19T13:46:28.202Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "whatsapp",
+    "total": 6,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386",
+      "+5541998937246",
+      "+5511968526616",
+      "+5511969222122"
+    ]
+  },
+  {
+    "timestamp": "2025-08-19T13:47:50.513Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "sms",
+    "total": 6,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386",
+      "+5541998937246",
+      "+5511968526616",
+      "+5511969222122"
+    ]
+  },
+  {
+    "timestamp": "2025-08-19T13:48:50.151Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "whatsapp",
+    "total": 6,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386",
+      "+5541998937246",
+      "+5511968526616",
+      "+5511969222122"
+    ]
+  },
+  {
+    "timestamp": "2025-08-19T13:49:51.802Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "whatsapp",
+    "total": 6,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386",
+      "+5541998937246",
+      "+5511968526616",
+      "+5511969222122"
+    ]
+  },
+  {
+    "timestamp": "2025-08-19T15:21:30.679Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "whatsapp",
+    "total": 6,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386",
+      "+5541998937246",
+      "+5511968526616",
+      "+5511969222122"
+    ]
+  },
+  {
+    "timestamp": "2025-08-19T15:24:56.602Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "whatsapp",
+    "total": 6,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386",
+      "+5541998937246",
+      "+5511968526616",
+      "+5511969222122"
+    ]
+  },
+  {
+    "timestamp": "2025-08-19T15:30:57.869Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "whatsapp",
+    "total": 6,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386",
+      "+5541998937246",
+      "+5511968526616",
+      "+5511969222122"
+    ]
+  },
+  {
+    "timestamp": "2025-08-20T16:01:48.717Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "sms",
+    "total": 6,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386",
+      "+5541998937246",
+      "+5511968526616",
+      "+5511969222122"
+    ]
+  },
+  {
+    "timestamp": "2025-08-20T16:02:57.162Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "whatsapp",
+    "total": 6,
+    "recipients": [
+      "+5541991039019",
+      "+5541998977350",
+      "+5511973786386",
+      "+5541998937246",
+      "+5511968526616",
+      "+5511969222122"
+    ]
+  },
+  {
+    "timestamp": "2025-08-21T05:34:02.715Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "sms",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-08-21T13:59:29.503Z",
+    "templateSid": "HX426bb0fed69a11acfc3b49b9312bc0e2",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-08-21T20:42:36.272Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-08-21T20:45:56.380Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-08-21T20:50:39.390Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-08-21T20:58:34.732Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-08-21T21:02:50.784Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-08-22T14:49:35.237Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "sms",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-08-22T14:52:01.434Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-09-18T13:56:52.704Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "sms",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-09-18T13:57:49.833Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-09-18T14:02:32.262Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "sms",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-09-18T14:03:36.791Z",
+    "templateSid": "HXa2f6c872eedbd7480e0771439143a065",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-10-08T15:08:43.990Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "sms",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-10-08T15:08:52.870Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-10-08T15:23:07.762Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-10-08T15:40:17.896Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "sms",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-10-08T15:40:52.945Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-10-08T15:45:05.273Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-10-08T15:50:33.256Z",
+    "templateSid": "HX091f6fb005ba9d0efd881f6f0936f905",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-10-09T15:23:58.694Z",
+    "templateSid": "HX0f15269959ed4c65b539d77346769dfe",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-10-09T15:56:18.785Z",
+    "templateSid": "HX0f15269959ed4c65b539d77346769dfe",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-10-09T16:05:26.484Z",
+    "templateSid": "HX0f15269959ed4c65b539d77346769dfe",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-10-09T16:11:44.080Z",
+    "templateSid": "HX0f15269959ed4c65b539d77346769dfe",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-10-09T16:23:11.049Z",
+    "templateSid": "HX0f15269959ed4c65b539d77346769dfe",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-10-09T16:30:44.815Z",
+    "templateSid": "HX0f15269959ed4c65b539d77346769dfe",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  },
+  {
+    "timestamp": "2025-10-09T16:44:28.515Z",
+    "templateSid": "HX0f15269959ed4c65b539d77346769dfe",
+    "channel": "whatsapp",
+    "total": 1,
+    "recipients": [
+      "+5541991039019"
+    ]
+  }
+]

@@ -1,0 +1,62 @@
+// src/pages/UploadPage.js
+
+import React, { useState } from 'react';
+import axios from 'axios';
+import './HistoryPage.css'; // Reutilizando os estilos padronizados
+
+function UploadPage() {
+  const [file, setFile] = useState(null);
+  const [message, setMessage] = useState('');
+  const [uploadedData, setUploadedData] = useState(null);
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+    setMessage('');
+    setUploadedData(null);
+  };
+
+  const handleUpload = async () => {
+    if (!file) {
+      alert('Selecione um arquivo para upload.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await axios.post('http://localhost:3001/api/campaign/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      setMessage('Upload realizado com sucesso!');
+      setUploadedData(res.data.data);
+    } catch (error) {
+      console.error(error);
+      setMessage('Erro ao fazer upload.');
+    }
+  };
+
+  return (
+    <div className="page-container">
+      <h2 className="page-title">Upload da Base</h2>
+
+      <div className="form-group">
+        <input className="form-control" type="file" onChange={handleFileChange} />
+        <button className="primary-button" onClick={handleUpload}>Fazer Upload</button>
+      </div>
+
+      {message && <p className="status-message">{message}</p>}
+
+      {uploadedData && (
+        <div className="upload-preview">
+          <h4>Prévia da Base:</h4>
+          <pre>{JSON.stringify(uploadedData.slice(0, 5), null, 2)}</pre>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default UploadPage;
+

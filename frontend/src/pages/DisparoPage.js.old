@@ -1,0 +1,167 @@
+import React, { useState, useEffect } from 'react';
+import Papa from 'papaparse';
+import '../styles/theme.css';
+
+const DisparoPage = () => {
+  const [csvData, setCsvData] = useState([]);
+  const [selectedTemplate, setSelectedTemplate] = useState('');
+  const [templates, setTemplates] = useState([]);
+  const [variableMapping, setVariableMapping] = useState({});
+  const [channel, setChannel] = useState('whatsapp');
+  const [preview, setPreview] = useState('');
+
+  useEffect(() => {
+    fetch('/api/templates/list')
+      .then(res => res.json())
+      .then(data => setTemplates(data.contents || []))
+      .catch(err => console.error('Erro ao buscar templates:', err));
+  }, []);
+
+  useEffect(() => {
+    if (!selectedTemplate || csvData.length === 0) return;
+
+    const template = templates.find(t => t.friendly_name === selectedTemplate);
+    const headers = Object.keys(csvData[0] || {});
+    const mapping = {};
+
+    if (template && template.variables) {
+      const vars = Array.isArray(template.variables)
+        ? template.variables
+        : Object.keys(template.variables);
+
+      vars.forEach(varKey => {
+        const match = headers.find(h => h.toLowerCase().includes(varKey.toLowerCase()));
+        mapping[varKey] = match || '';
+      });
+    }
+
+    setVariableMapping(mapping);
+  }, [selectedTemplate, csvData, templates]);
+
+  useEffect(() => {
+    const template = templates.find(t => t.friendly_name === selectedTemplate);
+    if (!template || !csvData.length) {
+      setPreview('');
+      return;
+    }
+
+    const raw = template?.types?.['twilio/text']?.body || '';
+    const filled = Object.keys(variableMapping).reduce((msg, key) => {
+      const regex = new RegExp(`{{${key}}}`, 'g');
+      const field = variableMapping[key];
+      const sample = csvData[0]?.[field] || '';
+      return msg.replace(regex, sample);
+    }, raw);
+
+    setPreview(filled);
+  }, [variableMapping, selectedTemplate, csvData, templates]);
+
+  const handleUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (result) => {
+        setCsvData(result.data || []);
+      }
+    });
+  };
+
+  const handleMappingChange = (templateVar, selectedCsvField) => {
+    setVariableMapping(prev => ({ ...prev, [templateVar]: selectedCsvField }));
+  };
+
+  const handleSend = async () => {
+    const selected = templates.find(t => t.friendly_name === selectedTemplate);
+    if (!selected) return;
+
+    const payload = {
+      messages: csvData.map(row => ({
+        to: row.telefone || row.telefone_destino || row.phone,
+        channel,
+        contentSid: selected.sid,
+        variables: Object.fromEntries(
+          Object.entries(variableMapping).map(([k, v]) => [k, row[v]])
+        )
+      }))
+    };
+
+    const res = await fetch('/api/campaign/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    console.log('Campanha enviada:', data);
+    alert('Campanha enviada!');
+  };
+
+  return (
+    <div className="page">
+      <h2>Disparar Campanha</h2>
+
+      <div className="card">
+        <div className="form-group">
+          <label>Upload CSV:</label>
+          <input type="file" accept=".csv" onChange={handleUpload} />
+        </div>
+
+        <div className="form-group">
+          <label>Template:</label>
+          <select onChange={e => setSelectedTemplate(e.target.value)} value={selectedTemplate}>
+            <option value="">Selecione um template</option>
+            {templates.map((t, i) => (
+              <option key={i} value={t.friendly_name}>{t.friendly_name}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label>Canal:</label>
+          <select value={channel} onChange={e => setChannel(e.target.value)}>
+            <option value="whatsapp">WhatsApp</option>
+            <option value="sms">SMS</option>
+          </select>
+        </div>
+
+        {selectedTemplate && (
+          <>
+            <h3>Mapeamento de Variáveis</h3>
+            {Object.keys(variableMapping).map((varKey) => (
+              <div className="form-group" key={varKey}>
+                <label>{varKey}: </label>
+                <select
+                  value={variableMapping[varKey]}
+                  onChange={(e) => handleMappingChange(varKey, e.target.value)}
+                >
+                  <option value="">-- selecione um campo --</option>
+                  {csvData[0] &&
+                    Object.keys(csvData[0]).map((header) => (
+                      <option key={header} value={header}>{header}</option>
+                    ))}
+                </select>
+              </div>
+            ))}
+          </>
+        )}
+
+        <button className="primary-btn" onClick={handleSend}>Iniciar Campanha</button>
+
+        {preview && (
+          <div className="preview-block">
+            <h3>Prévia da Mensagem</h3>
+            <div className="preview-box">
+              <p>{preview}</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default DisparoPage;
+

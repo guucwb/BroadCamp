@@ -1,0 +1,148 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // bcrypt hashed
+  name      String?
+  role      String   @default("user") // user, admin
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  campaigns Campaign[]
+  journeys  Journey[]
+  runs      Run[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model Campaign {
+  id        Int      @id @default(autoincrement())
+  name      String
+  channel   String
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Journey {
+  id        String   @id
+  name      String
+  nodes     Json     // ReactFlow nodes array
+  edges     Json     // ReactFlow edges array
+  status    String   @default("draft") // draft, active, archived
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  runs Run[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([updatedAt])
+}
+
+model Run {
+  id        String    @id
+  flowId    String    // Journey ID reference
+  flowName  String
+  status    String    // queued, running, paused, done, failed, stopped
+  processed Int       @default(0)
+  total     Int       @default(0)
+  startedAt DateTime?
+  endedAt   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  error     String?
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  journeyId String?
+  journey   Journey? @relation(fields: [journeyId], references: [id], onDelete: SetNull)
+
+  contacts Contact[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([journeyId])
+  @@index([createdAt])
+  @@index([flowId])
+}
+
+model Contact {
+  id          String   @id @default(uuid())
+  runId       String
+  phone       String
+  vars        Json?    // Contact variables
+  cursor      String?  // Current node ID
+  state       String   // active, waiting, waiting-inbound, done, failed
+  history     Json?    // Array of events
+  lastInbound Json?    // Last inbound message
+  wait        Json?    // Wait conditions
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  run Run @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId])
+  @@index([state])
+  @@index([phone])
+}
+
+model MessageLog {
+  id         String   @id @default(uuid())
+  runId      String?
+  contactId  String?
+  phone      String
+  channel    String   // whatsapp, sms
+  direction  String   // outbound, inbound
+  body       String?
+  contentSid String?
+  variables  Json?
+  status     String?  // sent, delivered, failed, read, etc.
+  twilioSid  String?  @unique
+  error      String?
+  createdAt  DateTime @default(now())
+
+  @@index([runId])
+  @@index([contactId])
+  @@index([phone])
+  @@index([createdAt])
+  @@index([twilioSid])
+}
+
+model Template {
+  id         String   @id @default(uuid())
+  name       String
+  contentSid String   @unique
+  channel    String   // whatsapp, sms
+  language   String   @default("en")
+  status     String   // approved, pending, rejected
+  category   String?  // MARKETING, UTILITY, AUTH
+  variables  Json?    // Variable definitions
+  preview    String?  // Preview text
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([status])
+  @@index([channel])
+  @@index([contentSid])
+}

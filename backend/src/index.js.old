@@ -1,0 +1,36 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+const campaignRoutes = require('./routes/campaignRoutes');
+const templateRoutes = require('./routes/templateRoutes');
+const suggestCopyRoutes = require('./routes/suggestCopy'); // <- continue com require
+const historyRoutes = require('./routes/history'); // <- endpoint de histórico  
+
+const devProxy = require('./routes/devProxy');
+const flowsRoutes = require('./routes/flows');
+const flowsAdminRoutes = require('./routes/flowsAdmin');
+const inboundRoutes = require('./routes/inbound');
+const templateGuardHybrid = require('./routes/templateGuardHybrid');
+const journeysRoutes = require('./routes/journeysRoutes');
+const runsRoutes = require('./routes/runsRoutes');
+
+
+app.use(cors());
+app.use(express.json());
+app.use('/api/history', historyRoutes); // <- endpoint de histórico
+app.use('/api/templates', templateRoutes);
+app.use('/api/campaign', campaignRoutes);
+app.use('/api/ai', suggestCopyRoutes); // <- endpoint de IA
+app.use('/api/flows', flowsRoutes);
+app.use('/api/flows-admin', flowsAdminRoutes);
+app.use('/webhooks/inbound', inboundRoutes);
+app.use('/api/template-guard', templateGuardHybrid);
+app.use('/api/dev', devProxy);
+app.use('/api/journeys', journeysRoutes);
+app.use('/api/runs', runsRoutes);
+
+app.listen(process.env.PORT || 3001, () => {
+  console.log(`Backend running on port ${process.env.PORT || 3001}`);
+});

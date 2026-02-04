@@ -1,0 +1,15 @@
+const express = require('express');
+const router = express.Router();
+const { registerReply } = require('../engine/flowEngine');
+
+router.post('/twilio', express.urlencoded({extended:false}), (req,res)=>{
+  const from = req.body.From || ''; const body = req.body.Body || '';
+  if(!from) return res.status(400).send('no From');
+  registerReply(from, body); res.status(200).send('ok');
+});
+router.post('/test', express.json(), (req,res)=>{
+  const { from, text } = req.body;
+  if(!from) return res.status(400).json({error:'no from'});
+  registerReply(from, text||''); res.json({ ok:true });
+});
+module.exports = router;

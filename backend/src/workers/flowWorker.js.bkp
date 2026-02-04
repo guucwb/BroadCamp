@@ -1,0 +1,233 @@
+// backend/src/workers/flowWorker.js
+require('dotenv').config();
+const fs = require('fs');
+const path = require('path');
+
+const DATA_DIR = path.join(__dirname, '..', 'data');
+const RUNS_DB = path.join(DATA_DIR, 'runs.json');
+const JOURNEYS_DB = path.join(DATA_DIR, 'journeys.json');
+
+// Twilio service (usa o seu twilioService.js; se faltar, cai em DRY)
+const twilioSvc = (() => {
+  try {
+    const mod = require('../../twilioService'); // dois níveis acima
+    const svc = mod?.default || mod || {};
+    // normaliza possíveis nomes diferentes
+    return {
+      sendWhatsApp: svc.sendWhatsApp || svc.sendWhatsapp || svc.sendWhatsAppMessage,
+      sendSMS: svc.sendSMS || svc.sendText || svc.sendSms
+    };
+  } catch {
+    return {
+      async sendWhatsApp(to, body) { console.log('[DRY] WhatsApp ->', to, body); },
+      async sendSMS(to, body) { console.log('[DRY] SMS ->', to, body); },
+    };
+  }
+})();
+
+function ensureFiles() {
+  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+  if (!fs.existsSync(RUNS_DB)) fs.writeFileSync(RUNS_DB, '[]', 'utf8');
+  if (!fs.existsSync(JOURNEYS_DB)) fs.writeFileSync(JOURNEYS_DB, '[]', 'utf8');
+}
+function safeReadJSON(file, fallback = []) {
+  ensureFiles();
+  try {
+    const txt = fs.readFileSync(file, 'utf8');
+    if (!txt || !txt.trim()) return fallback;
+    return JSON.parse(txt);
+  } catch (e) {
+    console.warn(`[flowWorker] JSON inválido em ${path.basename(file)}: ${e.message}. Resetando.`);
+    fs.writeFileSync(file, JSON.stringify(fallback, null, 2), 'utf8');
+    return fallback;
+  }
+}
+function readRuns() { return safeReadJSON(RUNS_DB, []); }
+function writeRuns(rows) { fs.writeFileSync(RUNS_DB, JSON.stringify(rows, null, 2)); }
+function readJourneys() { return safeReadJSON(JOURNEYS_DB, []); }
+
+function replaceVars(text, vars) {
+  return String(text || '').replace(/\{\{(\w+)\}\}/g, (_, k) => (vars[k] ?? ''));
+}
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+function nextOf(nodeId, edges) {
+  const e = edges.find((ed) => ed.source === nodeId);
+  return e?.target || null;
+}
+
+// DRY_RUN por padrão 'true' se não definido
+const DRY = (process.env.DRY_RUN ?? 'true') === 'true';
+
+async function processRun(runId) {
+  let runs = readRuns();
+  let run = runs.find((r) => r.id === runId);
+  if (!run) return;
+
+  if (run.status !== 'queued' && run.status !== 'running') return;
+
+  // marca running
+  run.status = 'running';
+  run.startedAt = run.startedAt || new Date().toISOString();
+  run.updatedAt = new Date().toISOString();
+  run.processed = run.processed || 0;
+  writeRuns(runs);
+
+  // carrega flow
+const flows = readJourneys();
+const flow = flows.find(f => f.id === run.flowId);
+if (!flow) {
+  run.status = 'failed';
+  run.error = `flow not found: ${run.flowId}`;
+  run.updatedAt = new Date().toISOString();
+  writeRuns(readRuns());
+  return;
+}
+
+  const nodes = flow.nodes || [];
+  const edges = flow.edges || [];
+
+  const audience = nodes.find((n) => n.type === 'audience');
+  if (!audience) {
+    runs = readRuns();
+    run = runs.find((r) => r.id === runId);
+    if (run) {
+      run.status = 'failed';
+      run.error = 'audience node missing';
+      run.updatedAt = new Date().toISOString();
+      writeRuns(runs);
+    }
+    return;
+  }
+
+  const d = audience.data || {};
+  const phoneKey = d.phoneKey;
+  const mapping = d.mapping || {};
+  const allRows = Array.isArray(d.allRows) ? d.allRows : [];
+
+  // seta total se ainda não tiver
+  runs = readRuns();
+  run = runs.find((r) => r.id === runId);
+  if (!run) return;
+  run.total = allRows.length;
+  run.flowName = flow.name || run.flowName || 'Flow';
+  run.updatedAt = new Date().toISOString();
+  writeRuns(runs);
+
+  console.log(`[RUN ${run.id}] Iniciando. Contatos: ${run.total}. DRY_RUN=${DRY}`);
+
+  // caminho linear (1 saída por nó)
+  let curId = audience.id;
+
+  // processa contato a contato
+  for (let idx = 0; idx < allRows.length; idx++) {
+    // re-lê para checar stop
+    runs = readRuns();
+    run = runs.find((r) => r.id === runId);
+    if (!run) return;
+
+    if (run.stopRequested) {
+      run.status = 'stopped';
+      run.updatedAt = new Date().toISOString();
+      writeRuns(runs);
+      console.log(`[RUN ${run.id}] Parado pelo usuário em ${run.processed}/${run.total}.`);
+      return;
+    }
+
+    const row = allRows[idx] || {};
+    const vars = {};
+    // aplica mapping col -> var
+    Object.entries(mapping).forEach(([col, vname]) => {
+      vars[vname] = row[col];
+    });
+    const phone = row[phoneKey];
+
+    // caminha do nó de audiência até o END
+    curId = audience.id;
+    while (true) {
+      const n = nodes.find((x) => x.id === curId);
+      if (!n) break;
+
+      if (n.type === 'message') {
+        const md = n.data || {};
+        const body = replaceVars(md.text || '', vars);
+        const channel = (md.channel || 'whatsapp').toLowerCase();
+
+        if (DRY) {
+          console.log(`[DRY][${channel}] (${idx + 1}/${allRows.length}) -> ${phone}: ${body}`);
+        } else {
+          if (channel === 'whatsapp') {
+            await twilioSvc.sendWhatsApp(phone, body);
+          } else {
+            await twilioSvc.sendSMS(phone, body);
+          }
+        }
+      }
+
+      if (n.type === 'api') {
+        // Opcional: implementar fetch + mapeamentos aqui se desejar
+      }
+
+      if (n.type === 'delay') {
+        const md = n.data || {};
+        if (md.mode === 'until' && md.until) {
+          const wait = Math.max(0, new Date(md.until).getTime() - Date.now());
+          if (wait > 0) {
+            console.log(`[RUN ${run.id}] Delay até ${md.until} (${Math.round(wait / 1000)}s).`);
+            await sleep(wait);
+          }
+        } else {
+          const secs = Number(md.seconds || 0);
+          if (secs > 0) {
+            console.log(`[RUN ${run.id}] Delay de ${secs}s.`);
+            await sleep(secs * 1000);
+          }
+        }
+      }
+
+      if (n.type === 'end') break;
+
+      const nxt = nextOf(n.id, edges);
+      if (!nxt) break;
+      curId = nxt;
+    }
+
+    // progresso
+    runs = readRuns();
+    run = runs.find((r) => r.id === runId);
+    if (!run) return;
+    run.processed = (run.processed || 0) + 1;
+    run.updatedAt = new Date().toISOString();
+    writeRuns(runs);
+  }
+
+  runs = readRuns();
+  run = runs.find((r) => r.id === runId);
+  if (!run) return;
+
+  if (run.status !== 'stopped') {
+    run.status = 'done';
+    run.endedAt = new Date().toISOString();
+    run.updatedAt = new Date().toISOString();
+    writeRuns(runs);
+  }
+  console.log(`[RUN ${run.id}] Finalizado. ${run.processed}/${run.total}`);
+}
+
+// scheduler simples
+const ACTIVE = new Set();
+setInterval(() => {
+  try {
+    const runs = readRuns();
+    const next = runs.find(
+      (r) => (r.status === 'queued' || r.status === 'running') && !ACTIVE.has(r.id)
+    );
+    if (next) {
+      ACTIVE.add(next.id);
+      processRun(next.id).finally(() => ACTIVE.delete(next.id));
+    }
+  } catch (e) {
+    console.error('[flowWorker] erro no loop:', e.message);
+  }
+}, 1500);
+
+console.log('[flowWorker] iniciado.');

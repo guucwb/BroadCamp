@@ -1,0 +1,762 @@
+[
+  {
+    "id": "flow_1756411885260",
+    "name": "Gus",
+    "nodes": [
+      {
+        "id": "end",
+        "type": "end",
+        "position": {
+          "x": 1074.690967435389,
+          "y": 125.72028368794327
+        },
+        "data": {},
+        "selectable": true,
+        "width": 320,
+        "height": 110,
+        "selected": false,
+        "positionAbsolute": {
+          "x": 1074.690967435389,
+          "y": 125.72028368794327
+        },
+        "dragging": false
+      },
+      {
+        "id": "aud_1755739311445_5526",
+        "type": "audience",
+        "position": {
+          "x": 59.95676433181717,
+          "y": -212.9835877161895
+        },
+        "data": {
+          "headers": [
+            "nome",
+            "telefone"
+          ],
+          "rows": [
+            {
+              "nome": "Gustavo",
+              "telefone": "+5541991039019"
+            }
+          ],
+          "mapping": {
+            "nome": "nome",
+            "telefone": "telefone"
+          },
+          "phoneKey": "telefone",
+          "allRows": [
+            {
+              "nome": "Gustavo",
+              "telefone": "+5541991039019"
+            }
+          ]
+        },
+        "width": 320,
+        "height": 110,
+        "selected": false,
+        "positionAbsolute": {
+          "x": 59.95676433181717,
+          "y": -212.9835877161895
+        },
+        "dragging": false
+      },
+      {
+        "id": "msg_1755739340740_5843",
+        "type": "message",
+        "position": {
+          "x": 775.4099290780143,
+          "y": -196.1804255319149
+        },
+        "data": {
+          "label": "Envia mensagem de boas vindas",
+          "channel": "whatsapp",
+          "mode": "text",
+          "text": "olá {{nome}}, bem vindo à Initu! aqui está a resposta da api {{title}}."
+        },
+        "width": 320,
+        "height": 110,
+        "selected": false,
+        "positionAbsolute": {
+          "x": 775.4099290780143,
+          "y": -196.1804255319149
+        },
+        "dragging": false
+      },
+      {
+        "id": "api_1755739407673_3608",
+        "type": "api",
+        "position": {
+          "x": 477.2443406391942,
+          "y": 76.66298876886256
+        },
+        "data": {
+          "label": "API Call",
+          "method": "POST",
+          "url": "https://twiliogus.free.beeceptor.com/todos",
+          "headers": "{}",
+          "body": "{\"teste\":\"Gus\"}",
+          "mappings": [
+            {
+              "path": "data[0].title",
+              "var": "title"
+            }
+          ],
+          "lastResponse": "Hey ya! Great to see you here. Btw, nothing is configured for this request path. Create a rule and start building a mock API."
+        },
+        "width": 320,
+        "height": 110,
+        "selected": false,
+        "dragging": false,
+        "positionAbsolute": {
+          "x": 477.2443406391942,
+          "y": 76.66298876886256
+        }
+      }
+    ],
+    "edges": [
+      {
+        "source": "aud_1755739311445_5526",
+        "sourceHandle": "out",
+        "target": "api_1755739407673_3608",
+        "targetHandle": "in",
+        "type": "smoothstep",
+        "style": {
+          "stroke": "#0f172a"
+        },
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#0f172a"
+        },
+        "id": "reactflow__edge-aud_1755739311445_5526out-api_1755739407673_3608in"
+      },
+      {
+        "source": "api_1755739407673_3608",
+        "sourceHandle": "out",
+        "target": "msg_1755739340740_5843",
+        "targetHandle": "in",
+        "type": "smoothstep",
+        "style": {
+          "stroke": "#0f172a"
+        },
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#0f172a"
+        },
+        "id": "reactflow__edge-api_1755739407673_3608out-msg_1755739340740_5843in"
+      },
+      {
+        "source": "msg_1755739340740_5843",
+        "sourceHandle": "out",
+        "target": "end",
+        "targetHandle": "in",
+        "type": "smoothstep",
+        "style": {
+          "stroke": "#0f172a"
+        },
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#0f172a"
+        },
+        "id": "reactflow__edge-msg_1755739340740_5843out-endin"
+      }
+    ],
+    "updatedAt": "2025-09-01T14:04:07.181Z"
+  },
+  {
+    "id": "flow_1756417402437",
+    "name": "Gus teste",
+    "nodes": [
+      {
+        "id": "aud_1756416613629_5771",
+        "type": "audience",
+        "position": {
+          "x": 33.5,
+          "y": 158.5
+        },
+        "data": {
+          "headers": [
+            "nome",
+            "telefone"
+          ],
+          "rows": [
+            {
+              "nome": "Gustavo",
+              "telefone": "+5541991039019"
+            }
+          ],
+          "mapping": {
+            "nome": "nome",
+            "telefone": "telefone"
+          },
+          "phoneKey": "telefone",
+          "allRows": [
+            {
+              "nome": "Gustavo",
+              "telefone": "+5541991039019"
+            }
+          ]
+        },
+        "width": 320,
+        "height": 110,
+        "selected": false,
+        "positionAbsolute": {
+          "x": 33.5,
+          "y": 158.5
+        },
+        "dragging": false
+      },
+      {
+        "id": "message_1756416615319_1040",
+        "type": "message",
+        "data": {
+          "label": "Envia mensagem de boas vindas",
+          "channel": "whatsapp",
+          "mode": "rich",
+          "text": "",
+          "buttonsJson": "[{\"type\":\"reply\",\"title\":\"Sim\",\"id\":\"YES\"}]",
+          "templateSid": "HX7c3a0eaa6b6650b8f6ab556994708ecf"
+        },
+        "position": {
+          "x": 58,
+          "y": 402
+        },
+        "width": 320,
+        "height": 110,
+        "selected": false,
+        "dragging": false,
+        "positionAbsolute": {
+          "x": 58,
+          "y": 402
+        }
+      },
+      {
+        "id": "wait_1756416697836_5260",
+        "type": "wait",
+        "data": {
+          "label": "Verifica resposta do cliente"
+        },
+        "position": {
+          "x": 380.7772786144578,
+          "y": 680
+        },
+        "width": 320,
+        "height": 128,
+        "selected": false,
+        "positionAbsolute": {
+          "x": 380.7772786144578,
+          "y": 680
+        },
+        "dragging": false
+      },
+      {
+        "id": "message_1756416707952_9623",
+        "type": "message",
+        "data": {
+          "label": "Positiva - Envia mensagem de sucesso",
+          "channel": "whatsapp",
+          "mode": "text",
+          "text": "Feliz que você vem!",
+          "templateSid": "HX007ebdf56714321075d13c8a551e28f7"
+        },
+        "position": {
+          "x": 718.7772786144578,
+          "y": 288
+        },
+        "width": 320,
+        "height": 134,
+        "selected": false,
+        "positionAbsolute": {
+          "x": 718.7772786144578,
+          "y": 288
+        },
+        "dragging": false
+      },
+      {
+        "id": "message_1756416729614_6403",
+        "type": "message",
+        "data": {
+          "label": "Negativa - Agradece e encerra o contato",
+          "channel": "whatsapp",
+          "mode": "text",
+          "text": "triste que voce nao vem!",
+          "templateSid": "HX85db8927795d6b5f4e2fc140fc0c35e4"
+        },
+        "position": {
+          "x": 869,
+          "y": 894.2156249999994
+        },
+        "width": 320,
+        "height": 134,
+        "selected": false,
+        "positionAbsolute": {
+          "x": 869,
+          "y": 894.2156249999994
+        },
+        "dragging": false
+      },
+      {
+        "id": "end_1756416837630_8185",
+        "type": "end",
+        "position": {
+          "x": 1180.263153614458,
+          "y": 492.194471385542
+        },
+        "data": {},
+        "width": 320,
+        "height": 110,
+        "selected": false,
+        "positionAbsolute": {
+          "x": 1180.263153614458,
+          "y": 492.194471385542
+        },
+        "dragging": false
+      }
+    ],
+    "edges": [
+      {
+        "source": "aud_1756416613629_5771",
+        "sourceHandle": "out",
+        "target": "message_1756416615319_1040",
+        "targetHandle": "in",
+        "type": "smoothstep",
+        "label": "",
+        "data": {
+          "conditionType": "keywords",
+          "value": "",
+          "isFallback": false
+        },
+        "style": {
+          "stroke": "#0f172a"
+        },
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#0f172a"
+        },
+        "id": "reactflow__edge-aud_1756416613629_5771out-message_1756416615319_1040in"
+      },
+      {
+        "source": "message_1756416615319_1040",
+        "sourceHandle": "out",
+        "target": "wait_1756416697836_5260",
+        "targetHandle": "in",
+        "type": "smoothstep",
+        "label": "",
+        "data": {
+          "conditionType": "keywords",
+          "value": "",
+          "isFallback": false
+        },
+        "style": {
+          "stroke": "#0f172a"
+        },
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#0f172a"
+        },
+        "id": "reactflow__edge-message_1756416615319_1040out-wait_1756416697836_5260in"
+      },
+      {
+        "source": "wait_1756416697836_5260",
+        "sourceHandle": "out",
+        "target": "message_1756416707952_9623",
+        "targetHandle": "in",
+        "type": "smoothstep",
+        "label": "SIM",
+        "data": {
+          "conditionType": "keywords",
+          "value": "sim|yes",
+          "isFallback": false
+        },
+        "style": {
+          "stroke": "#0f172a"
+        },
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#0f172a"
+        },
+        "id": "reactflow__edge-wait_1756416697836_5260out-message_1756416707952_9623in",
+        "selected": false
+      },
+      {
+        "source": "wait_1756416697836_5260",
+        "sourceHandle": "out",
+        "target": "message_1756416729614_6403",
+        "targetHandle": "in",
+        "type": "smoothstep",
+        "label": "nope",
+        "data": {
+          "conditionType": "keywords",
+          "value": "",
+          "isFallback": true
+        },
+        "style": {
+          "stroke": "#0f172a"
+        },
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#0f172a"
+        },
+        "id": "reactflow__edge-wait_1756416697836_5260out-message_1756416729614_6403in",
+        "selected": false
+      },
+      {
+        "id": "e_1756416837631_2226",
+        "source": "message_1756416707952_9623",
+        "target": "end_1756416837630_8185",
+        "type": "smoothstep"
+      },
+      {
+        "source": "message_1756416729614_6403",
+        "sourceHandle": "out",
+        "target": "end_1756416837630_8185",
+        "targetHandle": "in",
+        "type": "smoothstep",
+        "label": "",
+        "data": {
+          "conditionType": "keywords",
+          "value": "",
+          "isFallback": false
+        },
+        "style": {
+          "stroke": "#0f172a"
+        },
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#0f172a"
+        },
+        "id": "reactflow__edge-message_1756416729614_6403out-end_1756416837630_8185in"
+      }
+    ],
+    "updatedAt": "2025-09-01T14:05:18.401Z"
+  },
+  {
+    "id": "flow_1756849945585",
+    "name": "Demo Cogna",
+    "nodes": [
+      {
+        "id": "aud_1756848520528_4104",
+        "type": "audience",
+        "position": {
+          "x": -1321.0138802981971,
+          "y": -300.7095629265157
+        },
+        "data": {
+          "headers": [
+            "nome",
+            "telefone"
+          ],
+          "rows": [
+            {
+              "nome": "Gustavo",
+              "telefone": "+5541991039019"
+            }
+          ],
+          "mapping": {
+            "nome": "nome",
+            "telefone": "telefone"
+          },
+          "phoneKey": "telefone",
+          "allRows": [
+            {
+              "nome": "Gustavo",
+              "telefone": "+5541991039019"
+            }
+          ]
+        },
+        "width": 320,
+        "height": 110,
+        "selected": false,
+        "positionAbsolute": {
+          "x": -1321.0138802981971,
+          "y": -300.7095629265157
+        },
+        "dragging": false
+      },
+      {
+        "id": "message_1756848615289_5504",
+        "type": "message",
+        "data": {
+          "label": "Boas vindas",
+          "channel": "whatsapp",
+          "mode": "rich",
+          "text": "Olá! Bem vindo à Cogna!\n\nPor favor, envie a sua documentação.",
+          "mediaUrl": "https://magenta-cichlid-1010.twil.io/assets/Captura%20de%20Tela%202025-08-28%20a%CC%80s%2014.50.58.png"
+        },
+        "position": {
+          "x": -1308.1774124652247,
+          "y": -76.70588571018598
+        },
+        "width": 320,
+        "height": 110,
+        "selected": false,
+        "positionAbsolute": {
+          "x": -1308.1774124652247,
+          "y": -76.70588571018598
+        },
+        "dragging": false
+      },
+      {
+        "id": "delay_1756849016740_4017",
+        "type": "delay",
+        "data": {
+          "mode": "duration",
+          "seconds": 30,
+          "summary": "30 seconds"
+        },
+        "position": {
+          "x": -1311.815800738124,
+          "y": 123.59070947685615
+        },
+        "width": 320,
+        "height": 110,
+        "selected": false,
+        "positionAbsolute": {
+          "x": -1311.815800738124,
+          "y": 123.59070947685615
+        },
+        "dragging": false
+      },
+      {
+        "id": "message_1756849063885_1988",
+        "type": "message",
+        "data": {
+          "label": "Cobranca de documentos",
+          "channel": "whatsapp",
+          "mode": "text",
+          "text": "Olá, ainda não recebemos seus documentos. Por favor, nos envie e preencha com seus dados."
+        },
+        "position": {
+          "x": -1309.7845329167085,
+          "y": 348.1578932349168
+        },
+        "width": 320,
+        "height": 110,
+        "selected": false,
+        "positionAbsolute": {
+          "x": -1309.7845329167085,
+          "y": 348.1578932349168
+        },
+        "dragging": false
+      },
+      {
+        "id": "api_1756849134858_246",
+        "type": "api",
+        "data": {
+          "label": "API verifica divergencias",
+          "method": "GET",
+          "url": "https://twiliogus.free.beeceptor.com/todos",
+          "headers": "{}",
+          "body": "{}",
+          "mappings": [
+            {
+              "path": "data[0].completed",
+              "var": "divergencias"
+            }
+          ],
+          "lastResponse": "[\n  {\n    \"id\": 1,\n    \"title\": \"Create an endpoint at Beeceptor.\",\n    \"completed\": true\n  },\n  {\n    \"id\": 2,\n    \"title\": \"Send a request to your new Beeceptor endpoint.\",\n    \"completed\": true\n  },\n  {\n    \"id\": 3,\n    \"title\": \"Create a mocking rule to send dummy data.\",\n    \"completed\": false\n  },\n  {\n    \"id\": 4,\n    \"title\": \"Try out a failure response by sending 500 HTTP status code.\",\n    \"completed\": false\n  },\n  {\n    \"id\": 5,\n    \"title\": \"Use the proxy feature to send a request to a real API. Intercept traffic using Beeceptor.\",\n    \"completed\": false\n  }\n]"
+        },
+        "position": {
+          "x": -810.6198243485596,
+          "y": -291.9495408957931
+        },
+        "width": 320,
+        "height": 110,
+        "selected": false,
+        "positionAbsolute": {
+          "x": -810.6198243485596,
+          "y": -291.9495408957931
+        },
+        "dragging": false
+      },
+      {
+        "id": "code_1756849312469_3271",
+        "type": "code",
+        "data": {
+          "label": "verifica divergencias",
+          "code": "// return { nova_variavel: 123 };\n\nif (divergencias != true){\nreturn { divergencias: false };\n}"
+        },
+        "position": {
+          "x": -784.4229211896077,
+          "y": 2.948913537341042
+        },
+        "width": 320,
+        "height": 128,
+        "selected": false,
+        "positionAbsolute": {
+          "x": -784.4229211896077,
+          "y": 2.948913537341042
+        },
+        "dragging": false
+      },
+      {
+        "id": "api_1756849424518_714",
+        "type": "api",
+        "data": {
+          "label": "Atualiza Totvs",
+          "method": "POST",
+          "url": "https://twiliogus.free.beeceptor.com/todos",
+          "headers": "{}",
+          "body": "{}",
+          "mappings": [],
+          "lastResponse": ""
+        },
+        "position": {
+          "x": -402.82539637951936,
+          "y": 215.70866601834985
+        },
+        "width": 320,
+        "height": 110,
+        "selected": false,
+        "positionAbsolute": {
+          "x": -402.82539637951936,
+          "y": 215.70866601834985
+        },
+        "dragging": false
+      },
+      {
+        "id": "end_1756849945585_1450",
+        "type": "end",
+        "position": {
+          "x": -42.82539637951936,
+          "y": 215.70866601834985
+        },
+        "data": {}
+      }
+    ],
+    "edges": [
+      {
+        "source": "aud_1756848520528_4104",
+        "sourceHandle": "out",
+        "target": "message_1756848615289_5504",
+        "targetHandle": "in",
+        "type": "smoothstep",
+        "label": "",
+        "data": {
+          "conditionType": "keywords",
+          "value": "",
+          "isFallback": false
+        },
+        "style": {
+          "stroke": "#0f172a"
+        },
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#0f172a"
+        },
+        "id": "reactflow__edge-aud_1756848520528_4104out-message_1756848615289_5504in"
+      },
+      {
+        "source": "message_1756848615289_5504",
+        "sourceHandle": "out",
+        "target": "delay_1756849016740_4017",
+        "targetHandle": "in",
+        "type": "smoothstep",
+        "label": "",
+        "data": {
+          "conditionType": "keywords",
+          "value": "",
+          "isFallback": false
+        },
+        "style": {
+          "stroke": "#0f172a"
+        },
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#0f172a"
+        },
+        "id": "reactflow__edge-message_1756848615289_5504out-delay_1756849016740_4017in"
+      },
+      {
+        "source": "delay_1756849016740_4017",
+        "sourceHandle": "out",
+        "target": "message_1756849063885_1988",
+        "targetHandle": "in",
+        "type": "smoothstep",
+        "label": "",
+        "data": {
+          "conditionType": "keywords",
+          "value": "",
+          "isFallback": false
+        },
+        "style": {
+          "stroke": "#0f172a"
+        },
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#0f172a"
+        },
+        "id": "reactflow__edge-delay_1756849016740_4017out-message_1756849063885_1988in"
+      },
+      {
+        "source": "message_1756849063885_1988",
+        "sourceHandle": "out",
+        "target": "api_1756849134858_246",
+        "targetHandle": "in",
+        "type": "smoothstep",
+        "label": "",
+        "data": {
+          "conditionType": "keywords",
+          "value": "",
+          "isFallback": false
+        },
+        "style": {
+          "stroke": "#0f172a"
+        },
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#0f172a"
+        },
+        "id": "reactflow__edge-message_1756849063885_1988out-api_1756849134858_246in"
+      },
+      {
+        "source": "api_1756849134858_246",
+        "sourceHandle": "out",
+        "target": "code_1756849312469_3271",
+        "targetHandle": "in",
+        "type": "smoothstep",
+        "label": "",
+        "data": {
+          "conditionType": "keywords",
+          "value": "",
+          "isFallback": false
+        },
+        "style": {
+          "stroke": "#0f172a"
+        },
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#0f172a"
+        },
+        "id": "reactflow__edge-api_1756849134858_246out-code_1756849312469_3271in"
+      },
+      {
+        "source": "code_1756849312469_3271",
+        "sourceHandle": "out",
+        "target": "api_1756849424518_714",
+        "targetHandle": "in",
+        "type": "smoothstep",
+        "label": "",
+        "data": {
+          "conditionType": "keywords",
+          "value": "",
+          "isFallback": false
+        },
+        "style": {
+          "stroke": "#0f172a"
+        },
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#0f172a"
+        },
+        "id": "reactflow__edge-code_1756849312469_3271out-api_1756849424518_714in"
+      },
+      {
+        "id": "e_1756849945585_6922",
+        "source": "api_1756849424518_714",
+        "target": "end_1756849945585_1450",
+        "type": "smoothstep"
+      }
+    ],
+    "updatedAt": "2025-09-02T21:52:25.615Z"
+  }
+]
