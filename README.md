@@ -1,496 +1,461 @@
-# InituCastt - WhatsApp Campaign Dispatcher
+# BroadCamp - Plataforma de Campanhas WhatsApp & SMS
 
-<div align="center">
+Sistema completo de gerenciamento e disparo de mensagens via WhatsApp Business API e SMS usando Twilio.
 
-**Sistema profissional de disparo de campanhas via WhatsApp/SMS com journey builder visual**
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-[![Node.js](https://img.shields.io/badge/Node.js-20.x-green.svg)](https://nodejs.org/)
-[![React](https://img.shields.io/badge/React-18.x-blue.svg)](https://reactjs.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14+-blue.svg)](https://www.postgresql.org/)
-[![Redis](https://img.shields.io/badge/Redis-6+-red.svg)](https://redis.io/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+## 📋 Índice
 
-[Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Architecture](#-architecture) • [Contributing](#-contributing)
+- [Visão Geral](#visão-geral)
+- [Funcionalidades](#funcionalidades)
+- [Tecnologias](#tecnologias)
+- [Requisitos](#requisitos)
+- [Instalação](#instalação)
+- [Configuração](#configuração)
+- [Uso](#uso)
+- [API](#api)
+- [Arquitetura](#arquitetura)
+- [Segurança](#segurança)
+- [Deploy](#deploy)
+- [Troubleshooting](#troubleshooting)
 
-</div>
+## 🎯 Visão Geral
 
----
+BroadCamp é uma plataforma white-label para envio de mensagens em massa via WhatsApp e SMS, construída especialmente para parceiros Twilio. Permite que cada cliente configure suas próprias credenciais e gerencie campanhas de forma independente.
 
-## 📋 Overview
+### Características Principais
 
-InituCastt é uma plataforma completa para criação e execução de campanhas de mensagens via WhatsApp e SMS. Com um journey builder visual baseado em React Flow, você pode criar fluxos complexos de comunicação com seus contatos.
+- ✅ **Multi-tenant**: Cada cliente com suas credenciais Twilio
+- ✅ **WhatsApp Business API**: Envio via Content API da Twilio
+- ✅ **SMS Internacional**: Suporte E.164 para qualquer país
+- ✅ **Templates**: Criação, validação e gerenciamento de templates
+- ✅ **IA Integrada**: Geração automática de copy com OpenAI
+- ✅ **Analytics**: Dashboards e relatórios detalhados
+- ✅ **Autenticação**: Sistema JWT completo com controle de acesso
+- ✅ **Interface Moderna**: Design inspirado em Twilio Docs
 
-### ✨ Key Features
+## ⚡ Funcionalidades
 
-- 🎨 **Journey Builder Visual** - Arraste e solte nós para criar fluxos
-- 📊 **Upload CSV** - Importe listas de contatos facilmente
-- 🤖 **AI Policy Validation** - Validação automática de templates com OpenAI
-- 📱 **WhatsApp & SMS** - Suporte para ambos os canais via Twilio
-- ⚡ **High Performance** - Processamento paralelo com BullMQ (10x mais rápido)
-- 🔒 **Security First** - JWT auth, rate limiting, input validation
-- 📈 **Real-time Monitoring** - Acompanhe suas campanhas em tempo real
-- 🗄️ **PostgreSQL + Redis** - Banco de dados robusto e fila de jobs
-- 🐳 **Docker Ready** - Deploy com um comando
-- 🧪 **Tested** - Infraestrutura completa de testes com Jest
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Node.js 20.x or higher
-- PostgreSQL 14+
-- Redis 6+
-- Twilio Account (WhatsApp/SMS)
-- OpenAI API Key (optional, for template validation)
-
-### Installation
-
-```bash
-# Clone repository
-git clone https://github.com/yourusername/initucastt.git
-cd initucastt
-
-# Backend setup
-cd backend
-npm install
-cp .env.example .env
-# Edit .env with your credentials
-
-# Database setup
-npx prisma migrate deploy
-npm run db:seed  # Optional: migrate existing JSON data
-
-# Start backend
-npm run dev  # Starts API + Workers + Frontend
-
-# Or start components individually:
-npm start                # API only
-npm run workers          # Workers only (message + flow)
-npm run worker:message   # Message worker only
-npm run worker:flow      # Flow worker only
-```
-
-### Docker (Recommended)
-
-```bash
-# Start everything (PostgreSQL, Redis, Backend, Workers, Frontend)
-docker-compose up -d
-
-# Check status
-docker-compose ps
-
-# View logs
-docker-compose logs -f backend
-
-# Stop
-docker-compose down
-```
-
-Access the application:
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:3001
-- **Prisma Studio**: http://localhost:5555
-
----
-
-## 🏗️ Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                         Frontend (React)                        │
-│  Journey Builder • Campaign Manager • Template Validator        │
-└─────────────────────────┬───────────────────────────────────────┘
-                          │ HTTP/REST
-┌─────────────────────────▼───────────────────────────────────────┐
-│                      Backend (Express)                          │
-│  Routes • Middleware • Repositories • Services                  │
-├─────────────────────────┬───────────────────────────────────────┤
-│                         │                                       │
-│  ┌──────────────────────▼─────────────┐   ┌──────────────────┐ │
-│  │        PostgreSQL                  │   │      Redis       │ │
-│  │  Journeys • Runs • Contacts        │   │   BullMQ Queues  │ │
-│  └────────────────────────────────────┘   └──────────┬───────┘ │
-│                                                       │         │
-└───────────────────────────────────────────────────────┼─────────┘
-                                                        │
-                          ┌─────────────────────────────▼─────────┐
-                          │           Workers                     │
-                          │  • Message Worker (10x parallel)      │
-                          │  • Flow Worker (journey processing)   │
-                          └─────────────┬─────────────────────────┘
-                                        │
-                          ┌─────────────▼─────────────┐
-                          │    External APIs          │
-                          │  • Twilio (WhatsApp/SMS)  │
-                          │  • OpenAI (validation)    │
-                          └───────────────────────────┘
-```
-
-**Flow Execution**:
-```
-User creates journey → Launch → Create Run → Queue to flowQueue
-                                                     ↓
-                                              flowWorker processes
-                                                     ↓
-                                         Queue messages to messageQueue
-                                                     ↓
-                                         messageWorker sends (10 parallel)
-                                                     ↓
-                                              Twilio API → WhatsApp
-```
-
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for detailed architecture documentation.
-
----
-
-## 📚 Documentation
-
-### User Guides
-- [API Documentation](docs/API.md) - Complete API reference
-- [Deployment Guide](docs/DEPLOYMENT.md) - Production deployment
-- [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues and solutions
-
-### Developer Guides
-- [Architecture](docs/ARCHITECTURE.md) - System design and patterns
-- [Contributing](CONTRIBUTING.md) - How to contribute
-- [Phase Documentation](backend/) - Implementation phase details
-  - [Phase 1: Security](backend/README_PHASE1.md)
-  - [Phase 2: PostgreSQL](backend/README_PHASE2.md)
-  - [Phase 3: BullMQ](backend/README_PHASE3.md)
-  - [Phase 4: Testing](backend/README_PHASE4.md)
-
----
-
-## 🎯 Features in Detail
-
-### Journey Builder
-
-Create complex message flows with:
-- **Audience Node**: Define your target contacts
-- **Message Node**: Send WhatsApp/SMS with variable substitution
-- **Wait Node**: Wait for user response with conditional routing
-- **Delay Node**: Schedule messages or wait for specific time
-- **API Node**: Fetch external data (coming soon)
-- **End Node**: Complete the journey
-
-**Variable Substitution**:
-```
-Message: "Hello {{name}}, your order {{orderId}} is ready!"
-Contact: { name: "John", orderId: "12345" }
-Result: "Hello John, your order 12345 is ready!"
-```
-
-### Template Validation
-
-AI-powered validation ensures your templates comply with Meta's WhatsApp policies:
-- ✅ No promotional content in transactional templates
-- ✅ No misleading information
-- ✅ Clear opt-out instructions
-- ✅ Professional tone
-
-### Campaign Management
-
-- Upload contacts via CSV
-- Map CSV columns to variables
-- Real-time progress tracking
-- Export campaign results
-- Retry failed messages
-
-### Performance
-
-**Before (Phase 2)**:
-- Sequential message sending
-- 120 messages/minute
-- Polling-based (constant CPU)
-
-**After (Phase 3)**:
-- Parallel processing (10 workers)
-- 1200 messages/minute
-- Event-driven (on-demand CPU)
-- **10x faster** 🚀
-
----
-
-## 🛠️ Tech Stack
-
-### Backend
-- **Runtime**: Node.js 20.x
-- **Framework**: Express 4.x
-- **Database**: PostgreSQL 14+ (Prisma ORM)
-- **Queue**: Redis + BullMQ
-- **Auth**: JWT (jsonwebtoken)
-- **Validation**: Joi
-- **Messaging**: Twilio SDK
-- **AI**: OpenAI API
-- **Logging**: Winston
-- **Testing**: Jest + Supertest
-
-### Frontend
-- **Framework**: React 18.x
-- **UI**: Material-UI (MUI)
-- **Flow Editor**: React Flow
-- **State**: React Context + Hooks
-- **CSV**: PapaParse
-- **HTTP**: Axios
-
-### Infrastructure
-- **Containerization**: Docker + Docker Compose
-- **Database Migrations**: Prisma Migrate
-- **Process Manager**: PM2 (production)
-- **Reverse Proxy**: Nginx (frontend)
-
----
-
-## 📊 API Overview
-
-Base URL: `http://localhost:3001/api`
-
-### Journeys
-```http
-GET    /journeys           # List all journeys
-GET    /journeys/:id       # Get journey by ID
-POST   /journeys           # Create new journey
-PUT    /journeys/:id       # Update journey
-DELETE /journeys/:id       # Delete journey
-POST   /journeys/:id/duplicate  # Duplicate journey
-POST   /journeys/:id/launch     # Launch journey (start run)
-```
-
-### Runs
-```http
-GET    /runs               # List all runs
-GET    /runs/:id           # Get run by ID
-GET    /runs/:id/stats     # Get run statistics
-GET    /runs/:id/export    # Export run as CSV
-DELETE /runs/:id           # Delete run
-POST   /runs/:id/stop      # Stop running run
-```
-
-### Campaigns
-```http
-POST   /campaign/upload    # Upload CSV
-POST   /campaign/send      # Send campaign (bulk messages)
-GET    /campaign/history   # Campaign history
-GET    /campaign/:id       # Get campaign details
-DELETE /campaign/:id       # Delete campaign
-```
-
-### Messages
-```http
-POST   /messages           # Send single message
-```
+### Gestão de Campanhas
+- Disparo em massa para WhatsApp e SMS
+- Upload de CSV com validação E.164
+- Substituição de variáveis dinâmicas
+- Tracking de status (enviado, entregue, falha)
 
 ### Templates
-```http
-POST   /templates/validate # Validate template with AI
-GET    /templates          # List Twilio templates
-```
+- Criação com preview em tempo real
+- Validação de compliance (Meta/WhatsApp)
+- Detecção automática de variáveis
+- Sugestões de reescrita com IA
 
-See [docs/API.md](docs/API.md) for complete API documentation with examples.
+### Analytics
+- Dashboard com métricas principais
+- Gráficos de performance
+- Comparação por período
+- Top campanhas por performance
 
----
+### Administração
+- Gerenciamento de usuários (admin/user)
+- Configuração de credenciais Twilio
+- Configuração de API Keys (OpenAI)
+- Controle de acesso por role
 
-## 🧪 Testing
+## 🛠 Tecnologias
 
-```bash
-# Run all tests
-npm test
+### Frontend
+- **React 18** - UI Library
+- **Material-UI v5** - Design System
+- **React Router v7** - Navegação
+- **Notistack** - Toast notifications
+- **PapaParse** - Parsing CSV
 
-# Unit tests only
-npm run test:unit
+### Backend
+- **Node.js 20** - Runtime
+- **Express** - Web framework
+- **Prisma** - ORM
+- **PostgreSQL** - Banco de dados
+- **Redis** - Cache e filas
+- **BullMQ** - Job queue
+- **JWT** - Autenticação
+- **Bcrypt** - Hash de senhas
 
-# Integration tests only
-npm run test:integration
+### Infraestrutura
+- **Docker** - Containerização
+- **Docker Compose** - Orquestração
+- **Nginx** - Reverse proxy
+- **Winston** - Logging
 
-# Coverage report
-npm run test:coverage
+### Integrações
+- **Twilio** - WhatsApp & SMS
+- **OpenAI** - Geração de copy
 
-# Watch mode
-npm run test:watch
-```
+## 📦 Requisitos
 
-**Current Coverage**:
-- Helpers/Utilities: ~90%
-- Repositories: ~60%
-- Routes: ~40%
-- **Overall**: ~50% (target: 70%)
+- Docker 20+ e Docker Compose
+- Conta Twilio ativa
+- (Opcional) OpenAI API Key
 
----
+## 🚀 Instalação
 
-## 🔒 Security
+### 1. Clone o repositório
 
-InituCastt implements security best practices:
+\`\`\`bash
+git clone <repo-url>
+cd initucastt_old
+\`\`\`
 
-- ✅ **Authentication**: JWT with bcrypt password hashing
-- ✅ **Authorization**: User-based resource access control
-- ✅ **Rate Limiting**: Prevents brute force and DoS attacks
-- ✅ **Input Validation**: Joi schemas for all endpoints
-- ✅ **CORS**: Configured for allowed origins only
-- ✅ **Helmet**: Security headers (XSS, clickjacking, etc.)
-- ✅ **Webhook Validation**: Twilio signature verification
-- ✅ **Secrets Management**: Environment variables, not committed
-- ✅ **SQL Injection**: Prisma ORM prevents SQL injection
-- ✅ **Error Handling**: No stack traces in production
+### 2. Configure variáveis de ambiente
 
----
+\`\`\`bash
+cp backend/.env.example backend/.env
+\`\`\`
 
-## 🚢 Deployment
+Edite \`backend/.env\` com suas configurações iniciais (opcional, pode configurar via UI depois):
 
-### Production Checklist
-
-- [ ] Set strong `JWT_SECRET` (minimum 32 characters)
-- [ ] Configure production `DATABASE_URL`
-- [ ] Set up Redis with password (`REDIS_URL`)
-- [ ] Add real Twilio credentials
-- [ ] Set `NODE_ENV=production`
-- [ ] Configure `FRONTEND_URL` for CORS
-- [ ] Set up SSL/TLS (HTTPS)
-- [ ] Configure Nginx reverse proxy
-- [ ] Set up PM2 for process management
-- [ ] Configure database backups
-- [ ] Set up monitoring (e.g., Sentry, DataDog)
-- [ ] Configure log rotation
-
-See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed deployment guide.
-
-### Environment Variables
-
-```bash
+\`\`\`env
 # Database
-DATABASE_URL="postgresql://user:pass@host:5432/dbname"
+DATABASE_URL="postgresql://postgres:postgres@postgres:5432/whatsapp_campaigns"
 
 # Redis
-REDIS_HOST=127.0.0.1
-REDIS_PORT=6379
+REDIS_URL="redis://redis:6379"
 
-# Twilio
-TWILIO_ACCOUNT_SID=your_account_sid
-TWILIO_AUTH_TOKEN=your_auth_token
-TWILIO_WHATSAPP_NUMBER=whatsapp:+14155238886
-TWILIO_SMS_NUMBER=+14155238886
+# JWT
+JWT_SECRET="sua-chave-secreta-muito-segura-aqui"
 
-# OpenAI (optional)
-OPENAI_API_KEY=sk-...
+# Twilio (opcional - configure via UI)
+TWILIO_ACCOUNT_SID=
+TWILIO_AUTH_TOKEN=
+TWILIO_WHATSAPP_FROM=
+TWILIO_SMS_FROM=
 
-# Security
-JWT_SECRET=your_super_secret_key_minimum_32_chars
-JWT_EXPIRES_IN=24h
+# OpenAI (opcional)
+OPENAI_API_KEY=
 
-# Server
+# Frontend
+FRONTEND_URL=http://localhost:3000
+\`\`\`
+
+### 3. Inicie os containers
+
+\`\`\`bash
+docker-compose up -d
+\`\`\`
+
+Isso irá:
+- Criar banco PostgreSQL
+- Criar Redis para filas
+- Rodar migrations do Prisma
+- Iniciar backend API (porta 3001)
+- Iniciar 2 workers (BullMQ)
+- Build e servir frontend (porta 3000)
+- Criar usuário admin padrão
+
+### 4. Acesse a aplicação
+
+Abra [http://localhost:3000](http://localhost:3000)
+
+**Credenciais padrão:**
+- Email: \`admin@broadcamp.com\`
+- Senha: \`admin123\`
+
+**⚠️ IMPORTANTE:** Altere a senha após o primeiro login!
+
+## ⚙️ Configuração
+
+### 1. Login Inicial
+
+Acesse a aplicação e faça login com as credenciais padrão.
+
+### 2. Configure Credenciais Twilio
+
+Vá em **Configurações** no menu lateral e preencha:
+
+- **Account SID**: Encontre em console.twilio.com
+- **Auth Token**: Encontre em console.twilio.com
+- **WhatsApp Sender**: Número aprovado para WhatsApp (ex: \`+5541999999999\`)
+- **SMS Sender**: Número Twilio para SMS (ex: \`+14253294891\`)
+- **OpenAI API Key** (opcional): Para geração de copy
+
+Clique em **Salvar Configurações**.
+
+✅ **As configurações são salvas imediatamente e aplicadas em tempo real!**
+
+### 3. Criar Outros Usuários (Opcional)
+
+Vá em **Usuários** > **Novo Usuário** e crie usuários com role \`user\` ou \`admin\`.
+
+## 📱 Uso
+
+### Disparar Campanha
+
+1. Vá em **Disparo**
+2. Escolha o canal (WhatsApp ou SMS)
+3. Selecione um template aprovado
+4. Faça upload de CSV com contatos
+5. Configure variáveis (se houver)
+6. Clique em **Iniciar Disparo**
+
+### Criar Template
+
+1. Vá em **Templates**
+2. Preencha nome, idioma e categoria
+3. Escreva a mensagem (use \`{{1}}\`, \`{{2}}\` para variáveis)
+4. **(Opcional)** Use IA para gerar copy automaticamente
+5. Verifique compliance
+6. Clique em **Criar Template**
+7. Aguarde aprovação da Meta (via Twilio Console)
+
+### Ver Analytics
+
+1. Vá em **Analytics**
+2. Selecione período (7 dias, 30 dias, 12 meses)
+3. Filtre por canal (todos, WhatsApp, SMS)
+4. Veja gráficos e top campanhas
+
+## 📡 API
+
+### Autenticação
+
+Todas as rotas (exceto \`/api/auth/*\`) requerem header:
+
+\`\`\`
+Authorization: Bearer <jwt-token>
+\`\`\`
+
+### Endpoints Principais
+
+**Auth**
+\`\`\`
+POST   /api/auth/login       - Login
+GET    /api/auth/me          - Usuário atual
+POST   /api/auth/register    - Registrar (requer admin)
+\`\`\`
+
+**Users** (admin only)
+\`\`\`
+GET    /api/users            - Listar usuários
+POST   /api/users            - Criar usuário
+PATCH  /api/users/:id        - Atualizar usuário
+DELETE /api/users/:id        - Deletar usuário
+\`\`\`
+
+**Templates**
+\`\`\`
+GET    /api/templates        - Listar templates
+POST   /api/templates        - Criar template
+GET    /api/templates/:sid   - Buscar por SID
+\`\`\`
+
+**Campanhas**
+\`\`\`
+POST   /api/send/whatsapp    - Enviar WhatsApp
+POST   /api/send/sms         - Enviar SMS
+POST   /api/campaign         - Disparar campanha
+GET    /api/history          - Histórico de mensagens
+\`\`\`
+
+**Settings**
+\`\`\`
+GET    /api/settings         - Buscar configurações
+POST   /api/settings         - Salvar configurações
+\`\`\`
+
+## 🏗 Arquitetura
+
+### Estrutura de Pastas
+
+\`\`\`
+initucastt_old/
+├── backend/
+│   ├── src/
+│   │   ├── routes/          # Rotas da API
+│   │   ├── services/        # Lógica de negócio
+│   │   ├── workers/         # BullMQ workers
+│   │   ├── middleware/      # Auth, rate limit, etc
+│   │   ├── utils/           # Logger, helpers
+│   │   └── index.js         # Entry point
+│   ├── prisma/
+│   │   └── schema.prisma    # Modelo de dados
+│   ├── scripts/             # Utilitários
+│   └── Dockerfile
+├── frontend/
+│   ├── src/
+│   │   ├── pages/           # Páginas React
+│   │   ├── components/      # Componentes reutilizáveis
+│   │   ├── contexts/        # Context API (Auth)
+│   │   ├── theme/           # Material-UI theme
+│   │   └── App.js
+│   ├── public/
+│   ├── nginx.conf           # Nginx config
+│   └── Dockerfile
+├── docker-compose.yml
+└── README.md
+\`\`\`
+
+### Fluxo de Dados
+
+\`\`\`
+User → Nginx (3000) → React SPA
+                    ↓
+              API (3001) → PostgreSQL
+                    ↓         ↑
+                 BullMQ ← Redis
+                    ↓
+            Workers (message, flow)
+                    ↓
+              Twilio API
+\`\`\`
+
+### Workers
+
+**Message Worker** (Concurrency: 10)
+- Processa filas de mensagens
+- Rate limit: 50 msg/s
+- Retry: 3 tentativas
+- Backoff exponencial
+
+**Flow Worker** (Concurrency: 2)
+- Processa jornadas
+- Avança contatos entre nós
+- Gerencia delays e waits
+
+## 🔒 Segurança
+
+### Implementado
+
+✅ **Autenticação JWT** - Tokens com expiração  
+✅ **Bcrypt** - Hash de senhas com salt  
+✅ **Helmet** - Headers de segurança HTTP  
+✅ **CORS** - Configurado para frontend  
+✅ **Rate Limiting** - 100 req/15min (API), 100 req/min (webhooks)  
+✅ **Input Validation** - Joi schemas  
+✅ **SQL Injection** - Prisma (ORM)  
+✅ **Webhook Validation** - Assinatura Twilio  
+✅ **Logs Estruturados** - Winston (erros, acessos)  
+
+### Boas Práticas
+
+- Nunca commitar \`.env\` (já no \`.gitignore\`)
+- Tokens mascarados na UI
+- Senhas nunca retornadas pela API
+- Auth token em localStorage (HttpOnly não funciona com SPA)
+
+## 🚢 Deploy
+
+### Produção (Docker)
+
+1. Configure variáveis de ambiente de produção
+2. Use PostgreSQL e Redis externos (managed)
+3. Configure HTTPS (Let's Encrypt + Nginx)
+4. Use \`NODE_ENV=production\`
+
+\`\`\`bash
+# Build imagens
+docker-compose build
+
+# Subir em produção
+docker-compose up -d
+\`\`\`
+
+### Variáveis de Ambiente de Produção
+
+\`\`\`env
 NODE_ENV=production
-PORT=3001
-FRONTEND_URL=https://yourdomain.com
-LOG_LEVEL=info
+DATABASE_URL=<postgres-managed-url>
+REDIS_URL=<redis-managed-url>
+JWT_SECRET=<chave-forte-gerada>
+FRONTEND_URL=https://seudominio.com
+\`\`\`
 
-# Optional
-DRY_RUN=false  # Set to true to test without sending
-```
+### Health Check
 
----
+\`\`\`bash
+curl http://localhost:3001/health
+\`\`\`
 
-## 📈 Performance
+Resposta esperada:
+\`\`\`json
+{
+  "ok": true,
+  "timestamp": "2024-01-01T00:00:00.000Z",
+  "uptime": 3600,
+  "environment": "production"
+}
+\`\`\`
 
-### Benchmarks
+## 🐛 Troubleshooting
 
-**Message Throughput**:
-- Sequential (Phase 2): 120 msg/min
-- Parallel (Phase 3): **1200 msg/min** (10x improvement)
+### Container não sobe
 
-**Journey Processing**:
-- Runs processed: 2 in parallel
-- Contacts per run: Unlimited
-- Messages per contact: Unlimited
+\`\`\`bash
+# Ver logs
+docker-compose logs backend
+docker-compose logs frontend
 
-**Database Performance**:
-- PostgreSQL with indexes on key fields
-- Connection pooling via Prisma
-- Optimized queries with `select` (only needed fields)
+# Reconstruir
+docker-compose down
+docker-compose build --no-cache
+docker-compose up -d
+\`\`\`
 
-**Queue Performance**:
-- Message queue: 50 jobs/second rate limit
-- Flow queue: 10 jobs/second rate limit
-- Automatic retry with exponential backoff
-- Job cleanup (completed: 100, failed: 1000)
+### Mensagens não enviando
 
----
+1. Verifique credenciais em **Configurações**
+2. Verifique se o número WhatsApp está ATIVO (Twilio Console)
+3. Verifique se template está APROVADO pela Meta
+4. Veja logs: \`docker-compose logs backend\`
 
-## 🤝 Contributing
+### Webhook não funcionando
 
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+1. Configure webhook URL na Twilio Console:
+   \`https://seudominio.com/inbound/webhook\`
+2. Método: POST
+3. Valide assinatura Twilio
 
-### Development Workflow
+### Erro de autenticação
 
-```bash
-# 1. Fork and clone
-git clone https://github.com/yourusername/initucastt.git
-cd initucastt
+1. Token expirado - Faça login novamente
+2. Limpe localStorage: \`localStorage.clear()\`
+3. Verifique JWT_SECRET no backend
 
-# 2. Create branch
-git checkout -b feature/my-feature
+### Database connection error
 
-# 3. Make changes
-# ... code ...
+\`\`\`bash
+# Verificar se Postgres está rodando
+docker-compose ps postgres
 
-# 4. Format and lint
-npm run format
-npm run lint:fix
+# Rodar migrations
+docker exec initucastt-backend npx prisma migrate deploy
+\`\`\`
 
-# 5. Test
-npm test
+## 📝 Scripts Úteis
 
-# 6. Commit
-git add .
-git commit -m "feat: add my feature"
+\`\`\`bash
+# Ver logs em tempo real
+docker-compose logs -f backend
 
-# 7. Push and create PR
-git push origin feature/my-feature
-```
+# Acessar banco de dados
+docker exec -it initucastt-postgres psql -U postgres -d whatsapp_campaigns
 
-### Commit Convention
+# Criar novo usuário admin
+docker exec initucastt-backend node scripts/createAdminUser.js
 
-We follow [Conventional Commits](https://www.conventionalcommits.org/):
-- `feat:` New feature
-- `fix:` Bug fix
-- `docs:` Documentation changes
-- `test:` Adding tests
-- `refactor:` Code refactoring
-- `perf:` Performance improvement
-- `chore:` Maintenance tasks
+# Backup do banco
+docker exec initucastt-postgres pg_dump -U postgres whatsapp_campaigns > backup.sql
 
----
+# Restore do banco
+cat backup.sql | docker exec -i initucastt-postgres psql -U postgres -d whatsapp_campaigns
+\`\`\`
 
-## 📝 License
+## 📄 Licença
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License
 
----
+## 🤝 Suporte
 
-## 🙏 Acknowledgements
-
-Built with:
-- [React Flow](https://reactflow.dev/) - Visual flow builder
-- [Twilio](https://www.twilio.com/) - WhatsApp/SMS API
-- [Prisma](https://www.prisma.io/) - Next-generation ORM
-- [BullMQ](https://docs.bullmq.io/) - Job queue system
-- [Material-UI](https://mui.com/) - React UI framework
-- [OpenAI](https://openai.com/) - AI-powered validation
+Para dúvidas ou suporte, entre em contato com o time de desenvolvimento.
 
 ---
 
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/yourusername/initucastt/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/initucastt/discussions)
-- **Email**: support@yourdomain.com
-
----
-
-<div align="center">
-
-**Made with ❤️ by the InituCastt Team**
-
-[⬆ Back to Top](#initucastt---whatsapp-campaign-dispatcher)
-
-</div>
+**Desenvolvido com ❤️ para parceiros Twilio**

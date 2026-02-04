@@ -17,6 +17,9 @@ const logger = require('./utils/logger');
 
 const app = express();
 
+// Trust proxy (Nginx)
+app.set('trust proxy', true);
+
 // Create logs directory if it doesn't exist
 const logsDir = path.join(__dirname, '..', 'logs');
 if (!fs.existsSync(logsDir)) {
@@ -66,6 +69,9 @@ app.use('/inbound/webhook', webhookLimiter, require('./routes/inbound'));
 // API routes (with rate limiting)
 app.use('/api', apiLimiter); // Apply rate limiting to all API routes
 
+// Public auth routes (no authentication required)
+app.use('/api/auth', require('./routes/authRoutes'));
+
 // API endpoints
 app.use('/api/send', require('./routes/send'));
 app.use('/api/history', require('./routes/history'));
@@ -76,6 +82,8 @@ app.use('/api/template-guard', require('./routes/templateGuardHybrid'));
 app.use('/api/dev', require('./routes/devProxy'));
 app.use('/api/journeys', require('./routes/journeysRoutes'));
 app.use('/api/runs', require('./routes/runsRoutes'));
+app.use('/api/settings', require('./routes/settingsRoutes'));
+app.use('/api/users', require('./routes/usersRoutes'));
 
 // Protected routes (uncomment when authentication is implemented)
 // app.use('/api/*', authenticateToken);

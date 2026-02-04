@@ -64,5 +64,33 @@ async function sendWhatsApp({ to, body, contentSid, variables, mediaUrl, from })
   return res;
 }
 
+/**
+ * SMS via Messages API (sem prefixo whatsapp:)
+ */
+async function sendSMS({ to, body, from }) {
+  if (!to) throw new Error('to obrigatório');
+  if (!body) throw new Error('body obrigatório');
+
+  // Normaliza o número (mantém formato E.164)
+  const toClean = String(to).trim();
+  const toFormatted = toClean.startsWith('+') ? toClean : `+${toClean.replace(/\D/g, '')}`;
+
+  const smsFrom = from || process.env.TWILIO_SMS_FROM || process.env.TWILIO_SMS_NUMBER;
+  if (!smsFrom) throw new Error('Configure TWILIO_SMS_FROM ou TWILIO_SMS_NUMBER');
+
+  const params = {
+    to: toFormatted,
+    from: smsFrom,
+    body
+  };
+
+  console.log('[SMS OUTBOUND]', params);
+
+  const client = getClient();
+  const res = await client.messages.create(params);
+  console.log('[SMS OK]', res.sid, res.status);
+  return res;
+}
+
 // Alias p/ compat com legados
-module.exports = { sendWhatsApp, toWhats: coerceWhats };
+module.exports = { sendWhatsApp, sendSMS, toWhats: coerceWhats };

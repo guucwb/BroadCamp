@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const twilio = require('twilio');
-const { sendWhatsApp } = require('../services/twilioService');
+const { sendWhatsApp, sendSMS } = require('../services/twilioService');
 
 router.use((req, _res, next) => { console.log('[sendRoutes] hit', req.path); next(); });
 
@@ -55,6 +55,21 @@ router.post('/wa-text', async (req, res) => {
     return res.json({ sid: resp.sid, status: resp.status });
   } catch (err) {
     console.error('[API /wa-text FAIL]', err);
+    return res.status(500).json({ error: err.message, code: err.code, moreInfo: err.moreInfo });
+  }
+});
+
+// SMS real (sem prefixo whatsapp:)
+router.post('/sms', async (req, res) => {
+  try {
+    const to   = req.body?.to == null ? req.body?.to : String(req.body.to);
+    const body = req.body?.body;
+    const from = req.body?.from;
+    if (!to || !body) return res.status(400).json({ error: 'to e body são obrigatórios' });
+    const resp = await sendSMS({ to, body, from });
+    return res.json({ sid: resp.sid, status: resp.status });
+  } catch (err) {
+    console.error('[API /sms FAIL]', err);
     return res.status(500).json({ error: err.message, code: err.code, moreInfo: err.moreInfo });
   }
 });
