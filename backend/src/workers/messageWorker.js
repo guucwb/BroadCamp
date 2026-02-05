@@ -61,15 +61,9 @@ const messageWorker = new Worker(
             });
           }
         } else if (channel === 'sms') {
-          // SMS message (Twilio doesn't have sendSMS in twilioService, uses sendWhatsApp)
-          const client = require('twilio')(
-            process.env.TWILIO_ACCOUNT_SID,
-            process.env.TWILIO_AUTH_TOKEN
-          );
-
-          result = await client.messages.create({
+          // SMS message usando twilioService que lê settings.json
+          result = await twilioService.sendSMS({
             to,
-            from: process.env.TWILIO_SMS_NUMBER,
             body
           });
         }

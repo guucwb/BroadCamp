@@ -62,6 +62,7 @@ services:
     volumes:
       - ./backend/logs:/app/logs
       - ./backend/uploads:/app/uploads
+      - settings_data:/app/src/data
     command: npm start
 
   # Message Worker
@@ -86,6 +87,7 @@ services:
         condition: service_healthy
     volumes:
       - ./backend/logs:/app/logs
+      - settings_data:/app/src/data
     command: npm run worker:message
 
   # Flow Worker
@@ -110,6 +112,7 @@ services:
         condition: service_healthy
     volumes:
       - ./backend/logs:/app/logs
+      - settings_data:/app/src/data
     command: npm run worker:flow
 
   # Frontend
@@ -148,6 +151,8 @@ volumes:
   postgres_data:
     driver: local
   redis_data:
+    driver: local
+  settings_data:
     driver: local
 
 networks:

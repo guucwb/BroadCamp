@@ -1,21 +1,50 @@
 // backend/src/services/twilioService.js
 const twilio = require('twilio');
+const fs = require('fs');
+const path = require('path');
 
-console.log('[twilioService] v6 loaded (único, coerção robusta e Content API)');
+console.log('[twilioService] v7 loaded (lê settings.json dinamicamente)');
 
-let _client = null;
-function getClient() {
-  if (_client) return _client;
-  const { TWILIO_ACCOUNT_SID: accountSid, TWILIO_AUTH_TOKEN: authToken } = process.env;
-  if (!accountSid || !authToken) {
-    throw new Error('[twilioService] Falta TWILIO_ACCOUNT_SID/TWILIO_AUTH_TOKEN no ambiente.');
+const SETTINGS_FILE = path.join(__dirname, '../data/settings.json');
+
+// Lê configurações do settings.json se existir, senão usa process.env
+function getSettings() {
+  try {
+    if (fs.existsSync(SETTINGS_FILE)) {
+      const data = fs.readFileSync(SETTINGS_FILE, 'utf8');
+      const settings = JSON.parse(data);
+      console.log('[twilioService] Usando configurações do settings.json', {
+        accountSid: settings.twilioAccountSid?.substring(0, 8) + '...',
+        whatsapp: settings.twilioWhatsAppSender,
+        sms: settings.twilioSmsSender
+      });
+      return settings;
+    }
+  } catch (err) {
+    console.warn('[twilioService] Erro ao ler settings.json, usando .env', err.message);
   }
-  _client = twilio(accountSid, authToken);
-  return _client;
+
+  // Fallback para .env
+  return {
+    twilioAccountSid: process.env.TWILIO_ACCOUNT_SID,
+    twilioAuthToken: process.env.TWILIO_AUTH_TOKEN,
+    twilioWhatsAppSender: process.env.TWILIO_WHATSAPP_NUMBER?.replace('whatsapp:', ''),
+    twilioSmsSender: process.env.TWILIO_SMS_NUMBER || process.env.TWILIO_SMS_FROM
+  };
+}
+
+function getClient() {
+  const settings = getSettings();
+  const { twilioAccountSid: accountSid, twilioAuthToken: authToken } = settings;
+
+  if (!accountSid || !authToken) {
+    throw new Error('[twilioService] Falta TWILIO_ACCOUNT_SID/TWILIO_AUTH_TOKEN no ambiente ou settings.json');
+  }
+
+  return twilio(accountSid, authToken);
 }
 
 const messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID || null; // MG...
-const defaultWaFrom       = process.env.TWILIO_WHATSAPP_NUMBER || null;      // +1415...
 
 function normalizeWa(raw) {
   const only = String(raw ?? '').replace(/\D/g, '');
@@ -39,6 +68,10 @@ async function sendWhatsApp({ to, body, contentSid, variables, mediaUrl, from })
   if (!body && !contentSid) throw new Error('Defina body (texto) OU contentSid (template).');
 
   const params = { to: toWa };
+
+  // Lê configurações atuais do settings.json
+  const settings = getSettings();
+  const defaultWaFrom = settings.twilioWhatsAppSender;
 
   if (messagingServiceSid) params.messagingServiceSid = messagingServiceSid;
   else if (from || defaultWaFrom) params.from = `whatsapp:${String(from || defaultWaFrom).replace(/^whatsapp:/,'')}`;
@@ -75,7 +108,9 @@ async function sendSMS({ to, body, from }) {
   const toClean = String(to).trim();
   const toFormatted = toClean.startsWith('+') ? toClean : `+${toClean.replace(/\D/g, '')}`;
 
-  const smsFrom = from || process.env.TWILIO_SMS_FROM || process.env.TWILIO_SMS_NUMBER;
+  // Lê configurações atuais do settings.json
+  const settings = getSettings();
+  const smsFrom = from || settings.twilioSmsSender;
   if (!smsFrom) throw new Error('Configure TWILIO_SMS_FROM ou TWILIO_SMS_NUMBER');
 
   const params = {
